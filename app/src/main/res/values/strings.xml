@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">rastreioaluno</string>
+
+    <string-array name="user_types">
+        <item>Aluno</item>
+        <item>Transporte Escolar</item>
+    </string-array>
 </resources>

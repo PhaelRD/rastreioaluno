@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/user_id_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID: "
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
 
     <TextView
         android:id="@+id/welcome_text"
@@ -10,14 +20,41 @@
         android:text="Bem-vindo"
         android:textSize="24sp"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_below="@id/user_id_text_view"
+        android:layout_marginTop="20dp"/>
+
+    <Spinner
+        android:id="@+id/user_type_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/user_types"
+        android:layout_below="@id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome"
+        android:layout_below="@id/user_type_spinner"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Salvar"
+        android:layout_below="@id/name_edit_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
 
     <Switch
         android:id="@+id/location_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Compartilhar Localização"
-        android:layout_below="@id/welcome_text"
+        android:layout_below="@id/save_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"/>
 </RelativeLayout>
