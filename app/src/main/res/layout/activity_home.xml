@@ -4,9 +4,20 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/welcome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bem-vindo"
         android:textSize="24sp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <Switch
+        android:id="@+id/location_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compartilhar Localização"
+        android:layout_below="@id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
 </RelativeLayout>
