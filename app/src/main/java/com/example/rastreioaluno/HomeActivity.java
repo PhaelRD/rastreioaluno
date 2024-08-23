@@ -41,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     private Spinner userTypeSpinner;
     private EditText nameEditText;
     private Button saveButton;
+    private boolean isLocationUpdatesStarted = false; // Flag para controle das atualizações de localização
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,15 +176,17 @@ public class HomeActivity extends AppCompatActivity {
 
         try {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            isLocationUpdatesStarted = true; // Definir flag para indicar que as atualizações começaram
         } catch (SecurityException e) {
             Toast.makeText(this, "Erro ao solicitar atualizações de localização: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     private void stopLocationUpdates() {
-        if (locationCallback != null) {
+        if (isLocationUpdatesStarted) {
             try {
                 fusedLocationClient.removeLocationUpdates(locationCallback);
+                isLocationUpdatesStarted = false; // Definir flag para indicar que as atualizações foram paradas
             } catch (SecurityException e) {
                 Toast.makeText(this, "Erro ao parar atualizações de localização: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -211,14 +214,18 @@ public class HomeActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationUpdates();
+                // Permissão concedida, iniciar atualizações de localização se o switch estiver ativado
+                if (locationSwitch.isChecked()) {
+                    startLocationUpdates();
+                }
             } else {
-                Toast.makeText(this, "Permissão de localização negada.", Toast.LENGTH_SHORT).show();
+                // Permissão negada, desmarcar o switch
+                locationSwitch.setChecked(false);
+                Toast.makeText(this, "Permissão de localização é necessária para rastreamento.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    // Classes auxiliares para o Firebase
     private static class UserData {
         public String userType;
         public String name;
