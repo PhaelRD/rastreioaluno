@@ -4,6 +4,5 @@
     <string-array name="user_types">
         <item>Aluno</item>
         <item>Transporte Escolar</item>
-        <item>Escola</item>
     </string-array>
 </resources>

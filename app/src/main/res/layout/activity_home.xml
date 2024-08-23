@@ -63,7 +63,7 @@
         android:id="@+id/location_warning_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Se você for uma escola ou transportador escolar sua localização aparecerá automaticamente no aplicativo de rastreio. Se você quiser facilitar a localização, pode compartilhar seu User ID."
+        android:text="Se você for um transportador escolar sua localização aparecerá automaticamente no aplicativo de rastreio. Se você quiser facilitar a localização, pode compartilhar seu User ID."
         android:textSize="16sp"
         android:layout_below="@id/user_id_text_view"
         android:layout_marginTop="16dp"
