@@ -21,14 +21,12 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -39,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private LocationCallback locationCallback;
     private Switch locationSwitch;
     private TextView userIdTextView;
+    private TextView locationWarningTextView;
     private Spinner userTypeSpinner;
     private EditText nameEditText;
     private Button saveButton;
@@ -53,15 +52,11 @@ public class HomeActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         userIdTextView = findViewById(R.id.user_id_text_view);
+        locationWarningTextView = findViewById(R.id.location_warning_text_view);
         locationSwitch = findViewById(R.id.location_switch);
         userTypeSpinner = findViewById(R.id.user_type_spinner);
         nameEditText = findViewById(R.id.name_edit_text);
         saveButton = findViewById(R.id.save_button);
-
-        // Exibir o shortUserId
-        String userId = mAuth.getCurrentUser().getUid();
-        String shortUserId = userId.length() >= 6 ? userId.substring(0, 6) : userId;
-        userIdTextView.setText("User ID: " + shortUserId);
 
         // Configurar Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -79,8 +74,6 @@ public class HomeActivity extends AppCompatActivity {
         // Verificar permissões e iniciar o rastreamento
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        } else {
-            startLocationUpdates();
         }
     }
 
@@ -144,12 +137,21 @@ public class HomeActivity extends AppCompatActivity {
         if (isChecked) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 startLocationUpdates();
+
+                // Exibir o User ID e o aviso
+                String userId = mAuth.getCurrentUser().getUid();
+                String shortUserId = userId.length() >= 6 ? userId.substring(0, 6) : userId;
+                userIdTextView.setText("User ID: " + shortUserId);
+                userIdTextView.setVisibility(TextView.VISIBLE); // Mostrar o User ID
+                locationWarningTextView.setVisibility(TextView.VISIBLE); // Mostrar o aviso
             } else {
                 locationSwitch.setChecked(false); // Desmarcar o switch se a permissão não for concedida
                 Toast.makeText(this, "Permissão de localização necessária.", Toast.LENGTH_SHORT).show();
             }
         } else {
             stopLocationUpdates();
+            userIdTextView.setVisibility(TextView.GONE); // Ocultar o User ID
+            locationWarningTextView.setVisibility(TextView.GONE); // Ocultar o aviso
         }
     }
 
@@ -216,7 +218,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    // Classe para armazenar dados do usuário
+    // Classes auxiliares para o Firebase
     private static class UserData {
         public String userType;
         public String name;
@@ -231,7 +233,6 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    // Classe para armazenar dados de localização
     private static class LocationData {
         public double latitude;
         public double longitude;
