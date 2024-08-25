@@ -70,4 +70,14 @@
         android:padding="10dp"
         android:visibility="gone"
         android:textColor="#3F51B5"/>
+
+    <!-- Botão de Logout -->
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:layout_below="@id/location_warning_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
 </RelativeLayout>

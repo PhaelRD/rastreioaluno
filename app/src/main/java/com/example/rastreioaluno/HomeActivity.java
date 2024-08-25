@@ -1,6 +1,8 @@
 package com.example.rastreioaluno;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     private Spinner userTypeSpinner;
     private EditText nameEditText;
     private Button saveButton;
+    private Button logoutButton; // Adicionar referência ao botão de logout
     private boolean isLocationUpdatesStarted = false; // Flag para controle das atualizações de localização
 
     @Override
@@ -58,25 +61,63 @@ public class HomeActivity extends AppCompatActivity {
         userTypeSpinner = findViewById(R.id.user_type_spinner);
         nameEditText = findViewById(R.id.name_edit_text);
         saveButton = findViewById(R.id.save_button);
+        logoutButton = findViewById(R.id.logout_button);
 
-        // Configurar Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.user_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userTypeSpinner.setAdapter(adapter);
 
-        // Verificar se as informações do usuário estão preenchidas e atualizar o switch
         checkUserInfo();
 
         saveButton.setOnClickListener(v -> saveUserInfo());
-
         locationSwitch.setOnCheckedChangeListener(this::onLocationSwitchChanged);
 
-        // Verificar permissões e iniciar o rastreamento
+        logoutButton.setOnClickListener(v -> logout());
+
+        // Recuperar e definir o estado do switch
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        boolean isSwitchChecked = sharedPreferences.getBoolean("locationSwitchState", false);
+        locationSwitch.setChecked(isSwitchChecked);
+
+        if (isSwitchChecked && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            startLocationUpdates();
+        }
+
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
+
+
+    private void saveSwitchState(boolean isChecked) {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("locationSwitchState", isChecked);
+        editor.apply();
+    }
+
+    private void logout() {
+        // Verifica se o serviço de localização está em execução
+        if (isLocationUpdatesStarted) {
+            // Para o serviço de localização
+            stopService(new Intent(this, LocationService.class));
+            isLocationUpdatesStarted = false; // Atualiza a flag para indicar que as atualizações foram paradas
+        }
+
+        // Desmarcar o switch de localização e salvar o estado
+        locationSwitch.setChecked(false);
+        saveSwitchState(false); // Atualiza o estado salvo do switch
+
+        // Desconectar o usuário do Firebase
+        mAuth.signOut();
+
+        // Redirecionar para a MainActivity
+        Intent mainIntent = new Intent(HomeActivity.this, MainActivity.class);
+        startActivity(mainIntent);
+        finish(); // Finalizar a atividade atual
+    }
+
 
     private void checkUserInfo() {
         String userId = mAuth.getCurrentUser().getUid();
@@ -137,24 +178,27 @@ public class HomeActivity extends AppCompatActivity {
     private void onLocationSwitchChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                startLocationUpdates();
+                Intent serviceIntent = new Intent(this, LocationService.class);
+                startService(serviceIntent);
 
-                // Exibir o User ID e o aviso
                 String userId = mAuth.getCurrentUser().getUid();
                 String shortUserId = userId.length() >= 6 ? userId.substring(0, 6) : userId;
                 userIdTextView.setText("User ID: " + shortUserId);
-                userIdTextView.setVisibility(TextView.VISIBLE); // Mostrar o User ID
-                locationWarningTextView.setVisibility(TextView.VISIBLE); // Mostrar o aviso
+                userIdTextView.setVisibility(TextView.VISIBLE);
+                locationWarningTextView.setVisibility(TextView.VISIBLE);
             } else {
-                locationSwitch.setChecked(false); // Desmarcar o switch se a permissão não for concedida
+                locationSwitch.setChecked(false);
                 Toast.makeText(this, "Permissão de localização necessária.", Toast.LENGTH_SHORT).show();
             }
         } else {
-            stopLocationUpdates();
-            userIdTextView.setVisibility(TextView.GONE); // Ocultar o User ID
-            locationWarningTextView.setVisibility(TextView.GONE); // Ocultar o aviso
+            stopService(new Intent(this, LocationService.class));
+            userIdTextView.setVisibility(TextView.GONE);
+            locationWarningTextView.setVisibility(TextView.GONE);
         }
+        saveSwitchState(isChecked); // Salvar o estado do switch
     }
+
+
 
     private void startLocationUpdates() {
         LocationRequest locationRequest = LocationRequest.create();

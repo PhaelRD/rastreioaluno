@@ -17,10 +17,17 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private EditText emailEditText;
-    private EditText passwordEditText;
-    private Button registerButton;
+
+    // Campos e Botões
+    private EditText loginEmailEditText;
+    private EditText loginPasswordEditText;
     private Button loginButton;
+    private Button forgotPasswordButton; // Novo botão para recuperação de senha
+
+    private EditText registerEmailEditText;
+    private EditText registerPasswordEditText;
+    private EditText registerConfirmPasswordEditText;
+    private Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +40,69 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference(); // Inicializando o Realtime Database
 
-        emailEditText = findViewById(R.id.email);
-        passwordEditText = findViewById(R.id.password);
-        registerButton = findViewById(R.id.register_button);
+        // Inicializar os campos e botões para login
+        loginEmailEditText = findViewById(R.id.login_email);
+        loginPasswordEditText = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
+        forgotPasswordButton = findViewById(R.id.forgot_password_button); // Inicializar o botão de recuperação de senha
 
-        registerButton.setOnClickListener(v -> registerUser(
-                emailEditText.getText().toString(),
-                passwordEditText.getText().toString()
+        // Inicializar os campos e botões para registro
+        registerEmailEditText = findViewById(R.id.register_email);
+        registerPasswordEditText = findViewById(R.id.register_password);
+        registerConfirmPasswordEditText = findViewById(R.id.register_confirm_password);
+        registerButton = findViewById(R.id.register_button);
+
+        // Verificar se o usuário já está logado
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // Usuário já está logado, redirecionar para HomeActivity
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish(); // Finaliza a MainActivity para que o usuário não possa voltar para ela.
+        }
+
+        // Configurar o ouvinte de clique do botão de login
+        loginButton.setOnClickListener(v -> loginUser(
+                loginEmailEditText.getText().toString(),
+                loginPasswordEditText.getText().toString()
         ));
-        loginButton.setOnClickListener(v -> loginUser(emailEditText.getText().toString(), passwordEditText.getText().toString()));
+
+        // Configurar o ouvinte de clique do botão de registro
+        registerButton.setOnClickListener(v -> {
+            String email = registerEmailEditText.getText().toString();
+            String password = registerPasswordEditText.getText().toString();
+            String confirmPassword = registerConfirmPasswordEditText.getText().toString();
+            registerUser(email, password, confirmPassword);
+        });
+
+        // Configurar o ouvinte de clique do botão de recuperação de senha
+        forgotPasswordButton.setOnClickListener(v -> {
+            String email = loginEmailEditText.getText().toString();
+            if (email.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Por favor, insira seu e-mail.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Exibir um Toast para informar o usuário que o e-mail foi enviado
+                            Toast.makeText(MainActivity.this, "E-mail de recuperação de senha enviado. Verifique sua caixa de entrada.", Toast.LENGTH_LONG).show();
+                        } else {
+                            // Se falhar, exibir o erro
+                            handleFirebaseAuthError(task.getException());
+                        }
+                    });
+        });
     }
 
-    private void registerUser(String email, String password) {
+    private void registerUser(String email, String password, String confirmPassword) {
+        // Verificar se as senhas coincidem
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(MainActivity.this, "As senhas não coincidem. Tente novamente.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
