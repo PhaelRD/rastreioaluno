@@ -1,5 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Cores Primárias -->
+    <color name="colorPrimary">#FBC02D</color>
+    <color name="colorPrimaryDark">#F9A825</color>
+    <color name="colorAccent">#FFEB3B</color>
+
+    <!-- Cores de Texto -->
+    <color name="textPrimary">#FFFFFF</color>
+    <color name="textSecondary">#B0BEC5</color>
+
+    <!-- Cores de Botões -->
+    <color name="buttonBackground">#FFEB3B</color>
+    <color name="buttonTextColor">#000000</color>
+
+    <!-- Cores de Fundo -->
+    <color name="backgroundColor">#212121</color> <!-- Cor escura para o fundo -->
+    <color name="containerBackground">#424242</color> <!-- Cor mais clara para containers -->
+
+    <!-- Cores de Erro e Avisos -->
+    <color name="errorColor">#B00020</color>
+    <color name="warningColor">#FF9800</color>
 </resources>

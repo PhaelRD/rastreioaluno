@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/backgroundColor"> <!-- Mantenha a cor de fundo consistente -->
 
     <TextView
         android:id="@+id/welcome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bem-vindo"
-        android:textSize="24sp"
+        android:text="ROTA ESCOLAR"
+        android:textSize="32sp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
 
     <Spinner
         android:id="@+id/user_type_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/user_types"
         android:layout_below="@id/welcome_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="50dp"
+        android:padding="12dp"/>
 
     <EditText
         android:id="@+id/name_edit_text"
@@ -28,16 +34,22 @@
         android:layout_height="wrap_content"
         android:hint="Nome"
         android:layout_below="@id/user_type_spinner"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_margin="25dp"
+        android:padding="12dp"/>
 
     <Button
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Salvar"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_below="@id/name_edit_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        app:cornerRadius="8dp"
+        app:iconTint="@android:color/white"/>
 
     <Switch
         android:id="@+id/location_switch"
@@ -54,6 +66,7 @@
         android:layout_height="wrap_content"
         android:text="User ID: "
         android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
         android:layout_below="@id/location_switch"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
@@ -65,19 +78,21 @@
         android:layout_height="wrap_content"
         android:text="Se você for um transportador escolar sua localização aparecerá automaticamente no aplicativo de rastreio. Se você quiser facilitar a localização, pode compartilhar seu User ID."
         android:textSize="16sp"
+        android:textColor="@color/colorAccent"
         android:layout_below="@id/user_id_text_view"
         android:layout_marginTop="16dp"
         android:padding="10dp"
-        android:visibility="gone"
-        android:textColor="#3F51B5"/>
+        android:visibility="gone"/>
 
-    <!-- Botão de Logout -->
     <Button
         android:id="@+id/logout_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logout"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_below="@id/location_warning_text_view"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        app:cornerRadius="8dp"/>
 </RelativeLayout>

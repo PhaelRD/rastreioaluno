@@ -1,0 +1,35 @@
+<resources>
+    <!-- Tema do Aplicativo -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Personalize suas cores aqui -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Estilo de Texto -->
+    <style name="TextPrimary">
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextSecondary">
+        <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Estilo de Botão -->
+    <style name="ButtonStyle">
+        <item name="android:background">@color/buttonBackground</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <!-- Estilo de Container -->
+    <style name="ContainerStyle">
+        <item name="android:background">@color/containerBackground</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+</resources>

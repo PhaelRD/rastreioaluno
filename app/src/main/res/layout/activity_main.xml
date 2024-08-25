@@ -1,113 +1,172 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/backgroundColor"
+    tools:context=".MainActivity">
 
-    <LinearLayout
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:gravity="center"
+android:background="@color/backgroundColor">
+
+<!-- Título Principal -->
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="ROTA ESCOLAR"
+    android:textSize="32sp"
+    android:textColor="@color/colorPrimary"
+    android:textStyle="bold"
+    android:layout_marginBottom="24dp" />
+
+<!-- Texto de Cabeçalho para Login -->
+<TextView
+    android:id="@+id/login_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Área de Login"
+    android:textSize="24sp"
+    android:textColor="@color/colorPrimary"
+    android:textStyle="bold"
+    android:layout_marginBottom="24dp" />
+
+<!-- Container para Login -->
+<LinearLayout
+    android:id="@+id/login_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="32dp"
+    android:layout_marginHorizontal="8dp"> <!-- Fundo mais claro para containers -->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/login_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="16dp">
 
-        <!-- Texto de Cabeçalho para Login -->
-        <TextView
-            android:id="@+id/login_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Área de Login"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Container para Login -->
-        <LinearLayout
-            android:id="@+id/login_container"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:hint="Senha"
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/login_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_marginTop="16dp"
+        app:cornerRadius="8dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:strokeColor="@android:color/transparent"
+        app:strokeWidth="0dp"
+        android:textColor="@android:color/black"/>
 
-            <EditText
-                android:id="@+id/login_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Senha"
-                android:inputType="textPassword"
-                android:layout_marginTop="16dp" />
+    <!-- Botão para Recuperar Senha -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/forgot_password_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Esqueceu a Senha?"
+        android:layout_marginTop="16dp"
+        app:cornerRadius="8dp"
+        app:backgroundTint="@android:color/transparent"
+        app:strokeColor="@color/colorPrimary"
+        app:strokeWidth="1dp"
+        android:textColor="@color/colorPrimary"/>
 
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:layout_marginTop="16dp" />
+</LinearLayout>
 
-            <!-- Botão para Recuperar Senha -->
-            <Button
-                android:id="@+id/forgot_password_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Esqueceu a Senha?"
-                android:layout_marginTop="16dp"
-                android:textColor="@android:color/holo_blue_light" />
+<!-- Texto de Cabeçalho para Registro -->
+<TextView
+    android:id="@+id/register_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Área de Registro"
+    android:textSize="24sp"
+    android:textColor="@color/colorPrimary"
+    android:textStyle="bold"
+    android:layout_marginTop="32dp"
+    android:layout_marginBottom="24dp"/>
 
-        </LinearLayout>
+<!-- Container para Registro -->
+<LinearLayout
+    android:id="@+id/register_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginHorizontal="8dp"> <!-- Fundo mais claro para containers -->
 
-        <!-- Texto de Cabeçalho para Registro -->
-        <TextView
-            android:id="@+id/register_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Área de Registro"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <!-- Container para Registro -->
-        <LinearLayout
-            android:id="@+id/register_container"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/register_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:hint="Email"
+            android:inputType="textEmailAddress"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/register_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
 
-            <EditText
-                android:id="@+id/register_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Senha"
-                android:inputType="textPassword"
-                android:layout_marginTop="16dp" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/register_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Senha"
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/register_confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Confirmar Senha"
-                android:inputType="textPassword"
-                android:layout_marginTop="16dp" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
 
-            <Button
-                android:id="@+id/register_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Registrar"
-                android:layout_marginTop="16dp" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/register_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirmar Senha"
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar"
+        android:layout_marginTop="16dp"
+        app:cornerRadius="8dp"
+        app:backgroundTint="@color/colorPrimary"
+        android:textColor="@android:color/black"/>
+</LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>
 
-</ScrollView>
+    </ScrollView>
