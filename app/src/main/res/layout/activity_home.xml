@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/backgroundColor"> <!-- Mantenha a cor de fundo consistente -->
+    android:background="@color/backgroundColor">
 
     <TextView
         android:id="@+id/welcome_text"
@@ -17,14 +17,26 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
 
+    <!-- Subtítulo abaixo do título principal -->
+    <TextView
+        android:id="@+id/subtitle_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Para Motoristas e Estudantes"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
+
     <Spinner
         android:id="@+id/user_type_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/user_types"
-        android:layout_below="@id/welcome_text"
+        android:layout_below="@id/subtitle_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="75dp"
         android:layout_marginLeft="50dp"
         android:padding="12dp"/>
 

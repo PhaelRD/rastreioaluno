@@ -15,14 +15,29 @@ android:gravity="center"
 android:background="@color/backgroundColor">
 
 <!-- Título Principal -->
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="ROTA ESCOLAR"
-    android:textSize="32sp"
-    android:textColor="@color/colorPrimary"
-    android:textStyle="bold"
-    android:layout_marginBottom="24dp" />
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ROTA ESCOLAR"
+        android:textSize="32sp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Subtítulo abaixo do título principal -->
+    <TextView
+        android:id="@+id/subtitle_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Para Motoristas e Estudantes"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
+
 
 <!-- Texto de Cabeçalho para Login -->
 <TextView
@@ -33,7 +48,8 @@ android:background="@color/backgroundColor">
     android:textSize="24sp"
     android:textColor="@color/colorPrimary"
     android:textStyle="bold"
-    android:layout_marginBottom="24dp" />
+    android:layout_marginBottom="24dp"
+    android:layout_marginTop="75dp" />
 
 <!-- Container para Login -->
 <LinearLayout
