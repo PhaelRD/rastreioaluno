@@ -117,6 +117,7 @@ public class LocationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // Remover atualizações de localização ao destruir o serviço
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,13 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,8 +27,6 @@ public class HomeActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private FusedLocationProviderClient fusedLocationClient;
-    private LocationCallback locationCallback;
     private Switch locationSwitch;
     private TextView userIdTextView;
     private TextView locationWarningTextView;
@@ -44,7 +34,6 @@ public class HomeActivity extends AppCompatActivity {
     private EditText nameEditText;
     private Button saveButton;
     private Button logoutButton; // Adicionar referência ao botão de logout
-    private boolean isLocationUpdatesStarted = false; // Flag para controle das atualizações de localização
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +42,6 @@ public class HomeActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         userIdTextView = findViewById(R.id.user_id_text_view);
         locationWarningTextView = findViewById(R.id.location_warning_text_view);
@@ -80,15 +68,16 @@ public class HomeActivity extends AppCompatActivity {
         boolean isSwitchChecked = sharedPreferences.getBoolean("locationSwitchState", false);
         locationSwitch.setChecked(isSwitchChecked);
 
+        // Se o switch estiver ativado e a permissão de localização estiver concedida, iniciar o serviço de localização
         if (isSwitchChecked && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            startLocationUpdates();
+            startLocationService();
         }
 
+        // Solicitar permissão de localização se ainda não foi concedida
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
-
 
     private void saveSwitchState(boolean isChecked) {
         SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
@@ -98,13 +87,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        // Verifica se o serviço de localização está em execução
-        if (isLocationUpdatesStarted) {
-            // Para o serviço de localização
-            stopService(new Intent(this, LocationService.class));
-            isLocationUpdatesStarted = false; // Atualiza a flag para indicar que as atualizações foram paradas
-        }
-
         // Desmarcar o switch de localização e salvar o estado
         locationSwitch.setChecked(false);
         saveSwitchState(false); // Atualiza o estado salvo do switch
@@ -117,7 +99,6 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(mainIntent);
         finish(); // Finalizar a atividade atual
     }
-
 
     private void checkUserInfo() {
         String userId = mAuth.getCurrentUser().getUid();
@@ -177,9 +158,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private void onLocationSwitchChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
+            // Iniciar o serviço de localização quando o switch estiver ativado
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                Intent serviceIntent = new Intent(this, LocationService.class);
-                startService(serviceIntent);
+                startLocationService();
 
                 String userId = mAuth.getCurrentUser().getUid();
                 String shortUserId = userId.length() >= 6 ? userId.substring(0, 6) : userId;
@@ -191,66 +172,24 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permissão de localização necessária.", Toast.LENGTH_SHORT).show();
             }
         } else {
-            stopService(new Intent(this, LocationService.class));
+            // Parar o serviço de localização quando o switch estiver desativado
+            stopLocationService();
+
             userIdTextView.setVisibility(TextView.GONE);
             locationWarningTextView.setVisibility(TextView.GONE);
         }
+
         saveSwitchState(isChecked); // Salvar o estado do switch
     }
 
-
-
-    private void startLocationUpdates() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000); // Atualizar a cada 10 segundos
-        locationRequest.setFastestInterval(5000); // Atualizar a cada 5 segundos
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    updateLocationInFirebase(location);
-                }
-            }
-        };
-
-        try {
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-            isLocationUpdatesStarted = true; // Definir flag para indicar que as atualizações começaram
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Erro ao solicitar atualizações de localização: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+    private void startLocationService() {
+        Intent serviceIntent = new Intent(this, LocationService.class);
+        startService(serviceIntent);
     }
 
-    private void stopLocationUpdates() {
-        if (isLocationUpdatesStarted) {
-            try {
-                fusedLocationClient.removeLocationUpdates(locationCallback);
-                isLocationUpdatesStarted = false; // Definir flag para indicar que as atualizações foram paradas
-            } catch (SecurityException e) {
-                Toast.makeText(this, "Erro ao parar atualizações de localização: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private void updateLocationInFirebase(Location location) {
-        String userId = mAuth.getCurrentUser().getUid();
-
-        // Criar um objeto LocationData com a latitude e longitude
-        LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude());
-
-        // Atualizar o banco de dados do Firebase com a localização do usuário
-        mDatabase.child("users").child(userId).child("location").setValue(locationData)
-                .addOnSuccessListener(aVoid -> {
-                    // Localização atualizada com sucesso
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(HomeActivity.this, "Falha ao atualizar localização: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+    private void stopLocationService() {
+        Intent serviceIntent = new Intent(this, LocationService.class);
+        stopService(serviceIntent);
     }
 
     @Override
@@ -258,9 +197,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permissão concedida, iniciar atualizações de localização se o switch estiver ativado
+                // Permissão concedida, iniciar o serviço de localização se o switch estiver ativado
                 if (locationSwitch.isChecked()) {
-                    startLocationUpdates();
+                    startLocationService();
                 }
             } else {
                 // Permissão negada, desmarcar o switch
@@ -281,20 +220,6 @@ public class HomeActivity extends AppCompatActivity {
         public UserData(String userType, String name) {
             this.userType = userType;
             this.name = name;
-        }
-    }
-
-    private static class LocationData {
-        public double latitude;
-        public double longitude;
-
-        public LocationData() {
-            // Construtor padrão necessário para deserialização do Firebase
-        }
-
-        public LocationData(double latitude, double longitude) {
-            this.latitude = latitude;
-            this.longitude = longitude;
         }
     }
 }
