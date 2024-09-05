@@ -70,115 +70,83 @@ A classe `User` é um modelo para armazenar informações do usuário no Firebas
 
 # HomeActivity Documentation
 
-## Visão Geral
+HomeActivity é a atividade principal de uma aplicação Android para rastreamento de alunos, que permite aos usuários gerenciar suas informações de perfil e ativar/desativar o rastreamento de localização em segundo plano. A classe interage com o Firebase para salvar e recuperar dados do usuário, além de controlar o serviço de localização através de um `Switch`.
 
-A `HomeActivity` é a principal atividade onde o usuário pode gerenciar suas informações e configurações de rastreamento de localização. Ela permite ao usuário salvar informações pessoais, alternar a funcionalidade de rastreamento de localização e fazer logout.
+## Componentes e Funcionalidade
 
-## Estrutura do Código
+### Constantes:
+- `LOCATION_PERMISSION_REQUEST_CODE`: Código de requisição usado ao solicitar permissões de localização.
 
-### Importações
+### Campos:
+- **`FirebaseAuth mAuth`**: Instância do FirebaseAuth usada para autenticação do usuário.
+- **`DatabaseReference mDatabase`**: Referência ao Firebase Database para salvar e recuperar informações do usuário.
+- **`Switch locationSwitch`**: Switch usado para ativar ou desativar o serviço de localização.
+- **`TextView userIdTextView`**: Exibe um trecho do ID do usuário quando o serviço de localização está ativo.
+- **`TextView locationWarningTextView`**: Exibe uma mensagem de aviso relacionada ao rastreamento de localização.
+- **`Spinner userTypeSpinner`**: Spinner para seleção do tipo de perfil do usuário (ex.: estudante, professor).
+- **`EditText nameEditText`**: Campo de entrada para o nome do usuário.
+- **`Button saveButton`**: Botão para salvar as informações do usuário no Firebase.
+- **`Button logoutButton`**: Botão para realizar o logout do usuário e encerrar a sessão no Firebase.
 
-O código importa várias classes necessárias para a funcionalidade da atividade, incluindo:
-
-- `android.Manifest`
-- `android.content.Intent`
-- `android.content.SharedPreferences`
-- `android.content.pm.PackageManager`
-- `android.location.Location`
-- `android.os.Bundle`
-- `android.widget.*`
-- `androidx.annotation.NonNull`
-- `androidx.appcompat.app.AppCompatActivity`
-- `com.google.android.gms.location.*`
-- `com.google.android.gms.tasks.*`
-- `com.google.firebase.auth.FirebaseAuth`
-- `com.google.firebase.database.*`
-
-### Constantes e Variáveis
-
-#### Constantes
-
-- **LOCATION_PERMISSION_REQUEST_CODE**: Código de solicitação para permissões de localização.
-
-#### Variáveis de Instância
-
-- **mAuth**: Instância do Firebase Authentication.
-- **mDatabase**: Referência ao banco de dados do Firebase.
-- **fusedLocationClient**: Cliente para obter atualizações de localização.
-- **locationCallback**: Callback para receber atualizações de localização.
-- **locationSwitch**: Switch para ativar/desativar rastreamento de localização.
-- **userIdTextView**: TextView para exibir o ID do usuário.
-- **locationWarningTextView**: TextView para exibir um aviso de localização.
-- **userTypeSpinner**: Spinner para selecionar o tipo de usuário.
-- **nameEditText**: EditText para inserir o nome do usuário.
-- **saveButton**: Botão para salvar as informações do usuário.
-- **logoutButton**: Botão para fazer logout.
-- **isLocationUpdatesStarted**: Flag para verificar se as atualizações de localização estão ativas.
-
-### Métodos
+### Métodos:
 
 #### `onCreate(Bundle savedInstanceState)`
-
-Método chamado quando a atividade é criada. Configura a interface do usuário e inicializa variáveis e componentes, incluindo:
-
-- **Configuração dos Elementos da Interface**: Inicializa `FirebaseAuth`, `DatabaseReference`, e `FusedLocationProviderClient`.
-- **Configuração do Spinner**: Configura `ArrayAdapter` para o `userTypeSpinner`.
-- **Definição de Comportamento**: Define o comportamento dos botões e do switch.
-- **Restaurar Estado do Switch**: Restaura o estado do switch de localização a partir das preferências compartilhadas e solicita permissões de localização, se necessário.
+- Inicializa a interface e os componentes, incluindo o FirebaseAuth, FirebaseDatabase e widgets da interface.
+- Configura o Spinner com os tipos de usuários e verifica se as informações do usuário já estão armazenadas no Firebase.
+- Configura os listeners para os botões e o switch de localização.
+- Recupera o estado do switch de localização usando SharedPreferences e solicita permissões de localização se necessário.
 
 #### `saveSwitchState(boolean isChecked)`
-
-Salva o estado atual do switch de localização nas preferências compartilhadas.
+- Salva o estado atual do switch de localização no SharedPreferences para persistência entre as sessões.
 
 #### `logout()`
-
-Desconecta o usuário do Firebase e para o serviço de localização se estiver em execução. Em seguida, redireciona o usuário para `MainActivity`.
+- Desmarca o switch de localização, salva o estado, realiza o logout do Firebase e redireciona o usuário para a `MainActivity`.
 
 #### `checkUserInfo()`
-
-Verifica as informações do usuário no Firebase e preenche os campos da interface do usuário com os dados existentes. Desabilita o switch de localização se as informações do usuário não estiverem disponíveis.
+- Verifica se o usuário tem informações salvas no banco de dados do Firebase.
+- Se as informações existirem, preenche os campos de nome e tipo de usuário e habilita o switch de localização. Caso contrário, o switch de localização é desabilitado.
 
 #### `saveUserInfo()`
-
-Salva as informações do usuário (nome e tipo de usuário) no Firebase. Habilita o switch de localização após a conclusão com sucesso.
+- Salva as informações do usuário no Firebase. Se o campo de nome estiver vazio, exibe uma mensagem de erro.
+- Após salvar as informações com sucesso, o switch de localização é habilitado.
 
 #### `onLocationSwitchChanged(CompoundButton buttonView, boolean isChecked)`
+- Controla o início ou parada do serviço de localização com base no estado do switch.
+- Exibe ou oculta o ID do usuário e a mensagem de aviso de localização.
+- Salva o estado do switch.
 
-Manipula a mudança de estado do switch de localização. Inicia ou para o serviço de localização com base no estado do switch e salva o estado do switch nas preferências compartilhadas.
+#### `startLocationService()`
+- Inicia o serviço de localização (`LocationService`) se o switch estiver ativado.
 
-#### `startLocationUpdates()`
-
-Solicita atualizações de localização periódicas usando o `FusedLocationProviderClient`. Define o intervalo de atualização e a prioridade da solicitação de localização.
-
-#### `stopLocationUpdates()`
-
-Para as atualizações de localização, se estiverem ativas.
-
-#### `updateLocationInFirebase(Location location)`
-
-Atualiza a localização do usuário no Firebase com a latitude e longitude fornecidas.
+#### `stopLocationService()`
+- Para o serviço de localização (`LocationService`) se o switch estiver desativado.
 
 #### `onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)`
+- Trata o resultado da solicitação de permissões de localização.
+- Se a permissão for concedida e o switch estiver ativado, o serviço de localização é iniciado. Caso contrário, o switch é desativado.
 
-Lida com a resposta do usuário à solicitação de permissões de localização. Inicia atualizações de localização se a permissão for concedida e o switch estiver ativado.
-
-### Classes Internas
+### Classe Interna:
 
 #### `UserData`
+- Classe auxiliar para armazenar os dados do usuário, incluindo o tipo de usuário e o nome.
+- Contém um construtor padrão (necessário para deserialização do Firebase) e um construtor que inicializa os campos `userType` e `name`.
 
-Classe para armazenar as informações do usuário (`userType` e `name`).
+## Uso e Dependências
 
-- **Construtores**: 
-  - Construtor padrão
-  - Construtor com parâmetros
+### Permissões Necessárias:
+- **`ACCESS_FINE_LOCATION`**: Necessária para ativar o rastreamento de localização do dispositivo.
 
-#### `LocationData`
+### Dependências:
+- **Firebase Authentication**: Para autenticar o usuário.
+- **Firebase Database**: Para salvar e recuperar informações do usuário.
+- **SharedPreferences**: Para salvar o estado do switch de localização entre sessões.
 
-Classe para armazenar dados de localização (`latitude` e `longitude`).
+## Autor
+Desenvolvido por [Seu Nome].
 
-- **Construtores**: 
-  - Construtor padrão
-  - Construtor com parâmetros
+## Licença
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
+
 
 # LocationService Documentation
 
