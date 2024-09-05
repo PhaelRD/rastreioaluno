@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/e3164310-a8f5-4863-a800-5a5d8ea0d094" alt="Image 4" width="200">
+  <img src="https://github.com/user-attachments/assets/bb21343e-aef1-4849-9099-c965bca8a2a1" alt="Image 3" width="200">
+  <img src="https://github.com/user-attachments/assets/8d1d8e6d-52f4-4258-8b9d-cc4e3bec8cc9" alt="Image 2" width="200">
+  <img src="https://github.com/user-attachments/assets/90371abc-9693-473b-9212-c35d3c1d5894" alt="Image 1" width="200">
+</p>
+
+
 # MainActivity Documentation
 
 ## Descrição
