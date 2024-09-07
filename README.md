@@ -149,12 +149,6 @@ HomeActivity é a atividade principal de uma aplicação Android para rastreamen
 - **Firebase Database**: Para salvar e recuperar informações do usuário.
 - **SharedPreferences**: Para salvar o estado do switch de localização entre sessões.
 
-## Autor
-Desenvolvido por [Seu Nome].
-
-## Licença
-Este projeto está licenciado sob a [Licença MIT](LICENSE).
-
 
 # LocationService Documentation
 
