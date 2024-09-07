@@ -88,15 +88,15 @@
         android:id="@+id/location_warning_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Se você for um transportador escolar sua localização aparecerá automaticamente no aplicativo de rastreio. Se você quiser facilitar a localização, pode compartilhar seu User ID."
-        android:textSize="16sp"
-        android:textColor="@color/colorAccent"
         android:layout_below="@id/user_id_text_view"
         android:layout_marginTop="16dp"
+        android:justificationMode="inter_word"
         android:padding="10dp"
-        android:visibility="gone"
+        android:text="Se você for um transportador escolar sua localização aparecerá automaticamente no aplicativo de rastreio. Se você quiser facilitar a localização, pode compartilhar seu User ID."
         android:textAlignment="viewStart"
-        android:justificationMode="inter_word"/>
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/logout_button"
@@ -109,4 +109,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         app:cornerRadius="8dp"/>
+
+    <TextView
+        android:id="@+id/info_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Você deve usar uma conta diferente no app de pais."
+        android:textSize="16sp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@id/logout_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
 </RelativeLayout>
