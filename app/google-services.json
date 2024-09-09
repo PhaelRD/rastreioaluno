@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "462692648930",
+    "firebase_url": "https://rastreioaluno-fef2d-default-rtdb.firebaseio.com",
     "project_id": "rastreioaluno-fef2d",
     "storage_bucket": "rastreioaluno-fef2d.appspot.com"
   },
@@ -10,6 +11,35 @@
         "mobilesdk_app_id": "1:462692648930:android:9c7a9f00b0be256b091bbb",
         "android_client_info": {
           "package_name": "com.example.rastreioaluno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462692648930-8k0mm7o48p7qtgndpei8i0fkdkfvbk5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlz3lPv-rFIa13jAFwkSAwX7BM_Bn1WZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462692648930-8k0mm7o48p7qtgndpei8i0fkdkfvbk5h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462692648930:android:48e5b786ddb118ee091bbb",
+        "android_client_info": {
+          "package_name": "com.example.rastreioaluno2"
         }
       },
       "oauth_client": [
