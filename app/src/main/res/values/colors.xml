@@ -19,4 +19,7 @@
     <!-- Cores de Erro e Avisos -->
     <color name="errorColor">#B00020</color>
     <color name="warningColor">#FF9800</color>
+
+    <color name="black">#000000</color>
+    <color name="overlayColor">#12000000</color>
 </resources>

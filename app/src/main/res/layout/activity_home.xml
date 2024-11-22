@@ -1,123 +1,145 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    tools:context=".HomeActivity">
 
-    <TextView
-        android:id="@+id/welcome_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ROTA ESCOLAR"
-        android:textSize="32sp"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-
-    <!-- Subtítulo abaixo do título principal -->
-    <TextView
-        android:id="@+id/subtitle_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Para Motoristas e Estudantes"
-        android:textSize="18sp"
-        android:textColor="@color/colorAccent"
-        android:layout_below="@id/welcome_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"/>
-
-    <Spinner
-        android:id="@+id/user_type_spinner"
+    <!-- Parte superior com ícone de voltar -->
+    <LinearLayout
+        android:id="@+id/logo_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/user_types"
-        android:layout_below="@id/subtitle_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp"
-        android:layout_marginLeft="50dp"
-        android:padding="12dp"/>
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/backgroundColor"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingHorizontal="24dp">
 
-    <EditText
-        android:id="@+id/name_edit_text"
+        <!-- Título da tela -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:gravity="center"
+            android:text="Início"
+            android:textColor="@color/buttonBackground"
+            android:textSize="32sp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- Formulário de informações do usuário -->
+    <LinearLayout
+        android:id="@+id/register_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nome"
-        android:layout_below="@id/user_type_spinner"
-        android:layout_marginTop="16dp"
-        android:layout_margin="25dp"
-        android:padding="12dp"/>
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:background="@drawable/rounded_top_left"
+        app:layout_constraintTop_toBottomOf="@id/logo_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Salvar"
-        android:textColor="@android:color/black"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_below="@id/name_edit_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        app:cornerRadius="8dp"
-        app:iconTint="@android:color/white"/>
+        <!-- Nome do Usuário -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeErrorColor="@color/errorColor">
 
-    <Switch
-        android:id="@+id/location_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Compartilhar Localização"
-        android:layout_below="@id/save_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nome"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/user_id_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User ID: "
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimary"
-        android:layout_below="@id/location_switch"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"/>
+        <!-- Tipo de Usuário -->
+        <Spinner
+            android:id="@+id/user_type_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp"/>
 
-    <TextView
-        android:id="@+id/location_warning_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/user_id_text_view"
-        android:layout_marginTop="16dp"
-        android:justificationMode="inter_word"
-        android:padding="10dp"
-        android:text="Se você for um transportador escolar sua localização aparecerá automaticamente no aplicativo de rastreio. Se você quiser facilitar a localização, pode compartilhar seu User ID."
-        android:textAlignment="viewStart"
-        android:textColor="@color/colorAccent"
-        android:textSize="16sp"
-        android:visibility="gone" />
+        <!-- Switch para Localização -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Salvar"
+            android:textColor="@color/textPrimary"
+            app:backgroundTint="@color/backgroundColor"
+            app:cornerRadius="8dp" />
 
-    <Button
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/location_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ativar Rastreamento  "
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Container para o ID do Usuário e o botão de compartilhar -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Exibição do ID do Usuário -->
+            <TextView
+                android:id="@+id/user_id_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User ID: "
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:visibility="gone"/>
+
+            <!-- Botão de Compartilhar -->
+            <ImageButton
+                android:id="@+id/share_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_share"
+                android:contentDescription="Compartilhar ID"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <!-- Aviso de Localização -->
+        <TextView
+            android:id="@+id/location_warning_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Localização ativada."
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
+    <!-- Botão de Logout no canto inferior direito -->
+    <ImageButton
         android:id="@+id/logout_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:textColor="@android:color/black"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_below="@id/location_warning_text_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        app:cornerRadius="8dp"/>
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="32dp"
+    android:src="@drawable/ic_logout"
+    android:background="?android:attr/selectableItemBackgroundBorderless"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:contentDescription="Logout"/>
 
-    <TextView
-        android:id="@+id/info_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Você deve usar uma conta diferente no app de pais."
-        android:textSize="16sp"
-        android:textColor="@color/colorAccent"
-        android:layout_below="@id/logout_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
